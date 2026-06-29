@@ -19,4 +19,4 @@ O projeto faz parte das atividades práticas da disciplina de Programação Web.
 
 ### Página Inicial (Sem Mensagens)
 
-![Página Inicial Vazia](imagens/Imagem1.png)
+![Página Inicial Vazia](demo-django/imagens/Imagem1.png)
