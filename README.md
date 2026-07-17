@@ -1,8 +1,8 @@
-# 🚀 Django + Tailwind CSS: Modelos e Relacionamentos (1:N)
+# 🚀 Django + Tailwind CSS: Relacionamentos Muitos-para-Muitos (N:N) e Shell ORM
 
-Este repositório contém a segunda etapa do projeto `demo-django`. O objetivo desta fase foi aprofundar os conhecimentos no ORM do Django, implementando um relacionamento **Um-para-Muitos (1:N)** no banco de dados, além de estilizar os novos componentes dinâmicos utilizando o Tailwind CSS.
+Este repositório contém a quarta etapa do projeto `demo-django`. O objetivo desta fase foi compreender e implementar um relacionamento de **Muitos-para-Muitos (N:N)** no banco de dados utilizando o Django ORM, além de manipular os dados diretamente através do ambiente interativo do Django Shell.
 
-O projeto roda inteiramente em um container **Docker**, garantindo que o ambiente seja idêntico para qualquer desenvolvedor.
+O projeto continua rodando de forma isolada e simplificada dentro de containers **Docker**.
 
 ---
 
@@ -15,13 +15,44 @@ O projeto roda inteiramente em um container **Docker**, garantindo que o ambient
 
 ---
 
+## 📸 Screenshots
+
+### Página Inicial
+
+![Página Inicial](demo-django/imagens/image1.png)
+
+_Visualização das mensagens e suas respectivas tags._
+
+---
+
+### Gerenciamento de Tags no Admin
+
+![Tags no Admin](demo-django/imagens/image3.png)
+
+_Cadastro e manutenção das tags através do Django Admin._
+
+---
+
+### Associação de Tags às Mensagens
+
+![Relacionamento N](demo-django/imagens/image2.png)
+
+_Interface com `filter_horizontal` para facilitar a associação entre mensagens e tags._
+
+---
+
+_Manipulação dos relacionamentos N:N diretamente pelo ORM._
+
+---
+
 ## 🧠 O Que Foi Aprendido Nesta Etapa
 
-- **Modelagem baseada em relacionamentos:** criação do model `Categoria` e associação com o model `Mensagem` através de uma chave estrangeira (`ForeignKey`).
-- **Comportamento de remoção (`on_delete`):** configuração do parâmetro `models.SET_NULL` para garantir a integridade dos dados e evitar que mensagens sejam apagadas caso sua categoria seja removida.
-- **Customização do Django Admin:** registro de novos modelos no painel administrativo, inclusão de colunas de exibição (`list_display`) e criação de filtros laterais baseados no relacionamento (`list_filter`).
-- **Consultas do ORM em templates:** navegação por tabelas relacionadas (`{{ mensagem.categoria.nome }}`) com renderização condicional utilizando `{% if %}`.
-- **Relacionamento reverso (Reverse Lookup):** uso do `related_name="mensagens"` para consultar dados a partir do elemento pai (ex.: `categoria.mensagens.all()`) utilizando o Django Shell.
+- **Modelagem Muitos-para-Muitos (N:N):** criação do model `Tag` e sua associação com o model `Mensagem` usando o campo `ManyToManyField`.
+- **Tabelas intermediárias (tabelas de junção):** compreensão de como o Django gerencia automaticamente a tabela pivô (`home_mensagem_tags`) para conectar registros de ambas as tabelas.
+- **Campos específicos (`SlugField`):** utilização de slugs para garantir URLs amigáveis e padronizadas.
+- **Otimização do Django Admin:** uso da propriedade `filter_horizontal` para melhorar a experiência de seleção de múltiplos registros relacionados.
+- **Renderização dinâmica de coleções:** utilização do laço `{% for tag in m.tags.all %}` para exibir as tags associadas a cada mensagem.
+- **Consultas reversas:** acesso às mensagens relacionadas a partir de uma tag utilizando o `related_name`.
 
 ---
 
@@ -37,13 +68,13 @@ Para construir a imagem e iniciar a aplicação, execute:
 docker compose up --build
 ```
 
-O servidor estará disponível em:
+A aplicação estará disponível em:
 
 ```text
 http://localhost:8000
 ```
 
-### 2. Gerar e aplicar as migrações no banco
+### 2. Gerar e aplicar as migrações
 
 Com o container em execução, abra um novo terminal e execute:
 
@@ -52,26 +83,34 @@ docker compose run --rm web python manage.py makemigrations
 docker compose run --rm web python manage.py migrate
 ```
 
-### 3. Acessar o Painel Administrativo
+### 3. Gerenciar dados pelo Painel Administrativo
 
-Para cadastrar categorias e gerenciar as mensagens, acesse:
+Acesse:
 
 ```text
 http://localhost:8000/admin/
 ```
 
-### Página Inicial
+No painel administrativo será possível:
 
-![Página Inicial](demo-django/imagens/image1.png)
+- Criar novas tags.
+- Editar tags existentes.
+- Associar múltiplas tags a uma mesma mensagem.
+- Visualizar e gerenciar os relacionamentos N:N.
 
-### Painel admin (Categorias)
+---
 
-![Painel admin Categorias](demo-django/imagens/image2.png)
+## 🔄 Entendendo o Relacionamento N:N
 
-### Painel admin (Mensagens)
+Neste projeto:
 
-![Painel admin Mensagens](demo-django/imagens/image3.png)
+- Uma **Mensagem** pode possuir várias **Tags**.
+- Uma **Tag** pode estar associada a várias **Mensagens**.
+
+O Django cria automaticamente uma tabela intermediária para armazenar essas associações, eliminando a necessidade de gerenciar manualmente as chaves estrangeiras.
+
+---
 
 ## 💡 Sobre o Projeto
 
-Este projeto faz parte do meu portfólio de estudos em desenvolvimento backend com Python e Django, com foco em modelagem de dados, ORM, Docker e boas práticas de desenvolvimento web.
+Este projeto faz parte do meu portfólio de estudos em desenvolvimento backend com Python e Django, com foco em modelagem de banco de dados, ORM, Docker e boas práticas de desenvolvimento web.
