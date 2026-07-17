@@ -1,8 +1,10 @@
-# 🚀 Django + Tailwind CSS: Formulários HTML, Segurança e Ciclo CRUD (Create)
+# 🚀 Django + Tailwind CSS: Finalizando o Ciclo CRUD (Update & Delete)
 
-Este repositório contém a quinta etapa do projeto `demo-django`. O objetivo desta fase foi abrir a aplicação para a interação do usuário comum, implementando a operação de **Criação (Create)** do ciclo CRUD diretamente na página pública por meio de formulários dinâmicos, deixando de depender exclusivamente do painel administrativo ou do terminal.
+Este repositório contém a sexta e última etapa do projeto de evolução `demo-django`. O objetivo central desta fase foi consolidar as operações do ciclo de persistência, adicionando as capacidades de **Atualização (Update)** e **Exclusão (Delete)** de registros na interface pública através de parâmetros dinâmicos de rotas e reuso inteligente de código.
 
-O ambiente continua totalmente isolado e configurado via **Docker**.
+O ambiente de desenvolvimento segue componentizado e isolado via **Docker**.
+
+> 💡 Esta etapa conclui o ciclo essencial de manipulação de dados, mapeamento de rotas, formulários e segurança utilizando o ecossistema nativo do Django Framework.
 
 ---
 
@@ -23,20 +25,37 @@ O ambiente continua totalmente isolado e configurado via **Docker**.
 
 ---
 
-### Formulário de Criação
+### Edição de Mensagem
 
-![Formulário](demo-django/imagens/image2.png)
+![Editar Mensagem](demo-django/imagens/image2.png)
+
+---
+
+### Confirmação de Exclusão
+
+![Remover Mensagem](demo-django/imagens/image3.png)
 
 ---
 
 ## 🧠 O Que Foi Aprendido Nesta Etapa
 
-- **Ciclo CRUD e Métodos HTTP:** compreensão prática da diferença entre requisições **GET** (renderização do formulário) e **POST** (envio e processamento dos dados).
-- **Formulários Automatizados (`ModelForm`):** geração e validação de formulários HTML diretamente a partir dos modelos do Django, incluindo personalização através de `widgets`.
-- **Segurança na Web (CSRF):** implementação da tag `{% csrf_token %}` para proteção contra ataques do tipo _Cross-Site Request Forgery_.
-- **Padrão Post/Redirect/Get (PRG):** utilização de `redirect()` após o processamento do formulário para evitar submissões duplicadas.
-- **Processamento Manual de Relacionamentos N:N:** captura de texto livre, separação de tags por vírgulas, uso de `slugify` e reaproveitamento de registros com `get_or_create()`.
-- **Mensagens Temporárias (Flash Messages):** utilização do framework `django.contrib.messages` para exibir feedback ao usuário após operações realizadas.
+- **Parâmetros de rota (Path Converters):** captura dinâmica de identificadores através de URLs como `<int:id>`.
+- **Resiliência e segurança (`get_object_or_404`):** tratamento automático de registros inexistentes com resposta HTTP 404.
+- **Reuso de formulários com `instance`:** utilização do mesmo `ModelForm` para criação e edição de registros.
+- **Refatoração com o princípio DRY:** extração da lógica de processamento de tags para uma função reutilizável.
+- **Sincronização de relacionamentos N:N:** uso de `.clear()` para remover associações antigas antes de aplicar novas tags.
+- **Exclusões seguras:** implementação de fluxo de confirmação utilizando requisições `POST` protegidas por CSRF.
+
+---
+
+## 🔄 Visão Geral do Ciclo CRUD Concluído
+
+| Letra | Operação | Método HTTP | Rota (URL)                 | Interface                             |
+| :---: | -------- | :---------: | -------------------------- | ------------------------------------- |
+| **C** | Create   |   `POST`    | `/nova/`                   | Formulário público (`nova.html`)      |
+| **R** | Read     |    `GET`    | `/`                        | Página inicial (`index.html`)         |
+| **U** | Update   |   `POST`    | `/mensagens/<id>/editar/`  | Formulário preenchido (`editar.html`) |
+| **D** | Delete   |   `POST`    | `/mensagens/<id>/remover/` | Tela de confirmação (`remover.html`)  |
 
 ---
 
@@ -46,42 +65,66 @@ Certifique-se de ter o **Docker** e o **Docker Compose** instalados em sua máqu
 
 ### 1. Subir o container e iniciar o servidor
 
-Para construir a imagem e iniciar a aplicação, execute:
+Execute:
 
-```bash
+```bash id="rn4g8x"
 docker compose up --build
 ```
 
 A aplicação estará disponível em:
 
-```text
+```text id="0vlvhj"
 http://localhost:8000
 ```
 
-### 2. Acessar a aplicação
+### 2. Aplicar as migrações
+
+Caso esteja executando o projeto pela primeira vez:
+
+```bash id="ygcth4"
+docker compose run --rm web python manage.py makemigrations
+docker compose run --rm web python manage.py migrate
+```
+
+### 3. Acessar a aplicação
 
 Abra o navegador e acesse:
 
-```text
+```text id="tfjmb8"
 http://localhost:8000
 ```
 
-A partir desta etapa, novas mensagens podem ser criadas diretamente pela interface pública da aplicação.
+---
+
+## 🧪 Funcionalidades Disponíveis
+
+Após concluir todas as etapas do projeto, a aplicação permite:
+
+- Criar novas mensagens.
+- Visualizar mensagens cadastradas.
+- Editar mensagens existentes.
+- Remover mensagens com confirmação.
+- Gerenciar categorias e tags.
+- Utilizar relacionamentos **1:N** e **N:N** através do ORM do Django.
+- Receber feedback visual por meio de mensagens temporárias (_flash messages_).
 
 ---
 
-## 🔄 Fluxo de Criação de Mensagens
+## 🏁 Conclusão
 
-1. O usuário acessa o formulário através de uma requisição **GET**.
-2. O Django renderiza o formulário utilizando um `ModelForm`.
-3. O usuário preenche os campos e envia os dados através de uma requisição **POST**.
-4. O servidor valida as informações recebidas.
-5. As tags são processadas e associadas à mensagem.
-6. Uma mensagem de sucesso é exibida.
-7. O usuário é redirecionado para evitar reenvios acidentais do formulário.
+Ao final desta etapa, a aplicação implementa integralmente o ciclo **CRUD (Create, Read, Update e Delete)** utilizando recursos nativos do Django, incluindo:
+
+- ORM e relacionamentos entre modelos.
+- Formulários automatizados com `ModelForm`.
+- Validação e proteção CSRF.
+- Rotas dinâmicas.
+- Mensagens temporárias.
+- Reaproveitamento de código e boas práticas de desenvolvimento.
+
+Este projeto representa uma base sólida para aplicações web mais complexas construídas com Django.
 
 ---
 
 ## 💡 Sobre o Projeto
 
-Este projeto faz parte do meu portfólio de estudos em desenvolvimento backend com Python e Django, com foco em desenvolvimento web, modelagem de dados, segurança de aplicações e boas práticas de construção de sistemas.
+Este projeto faz parte do meu portfólio de estudos em desenvolvimento backend com Python e Django, com foco em desenvolvimento web, modelagem de dados, ORM, segurança e boas práticas de engenharia de software.
