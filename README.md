@@ -62,15 +62,15 @@ http://localhost:8000/admin/
 
 ### Página Inicial
 
-![Página Inicial](demo-django/imagens/Imagem1.png)
+![Página Inicial](demo-django/imagens/Image1.png)
 
 ### Painel admin (Categorias)
 
-![Painel admin Categorias](demo-django/imagens/Imagem2.png)
+![Painel admin Categorias](demo-django/imagens/Image2.png)
 
 ### Painel admin (Mensagens)
 
-![Painel admin Mensagens](demo-django/imagens/Imagem3.png)
+![Painel admin Mensagens](demo-django/imagens/Image3.png)
 
 ## 💡 Sobre o Projeto
 
