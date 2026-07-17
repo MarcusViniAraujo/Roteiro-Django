@@ -19,13 +19,13 @@ O ambiente continua totalmente isolado e configurado via **Docker**.
 
 ### Página Inicial
 
-![Página Inicial](docs/images/image1.png)
+![Página Inicial](demo-django/imagens/image1.png)
 
 ---
 
 ### Formulário de Criação
 
-![Formulário](docs/images/image2.png)
+![Formulário](demo-django/imagens/image2.png)
 
 ---
 
