@@ -1,8 +1,8 @@
-# 🚀 Django + Tailwind CSS: Relacionamentos Muitos-para-Muitos (N:N) e Shell ORM
+# 🚀 Django + Tailwind CSS: Formulários HTML, Segurança e Ciclo CRUD (Create)
 
-Este repositório contém a quarta etapa do projeto `demo-django`. O objetivo desta fase foi compreender e implementar um relacionamento de **Muitos-para-Muitos (N:N)** no banco de dados utilizando o Django ORM, além de manipular os dados diretamente através do ambiente interativo do Django Shell.
+Este repositório contém a quinta etapa do projeto `demo-django`. O objetivo desta fase foi abrir a aplicação para a interação do usuário comum, implementando a operação de **Criação (Create)** do ciclo CRUD diretamente na página pública por meio de formulários dinâmicos, deixando de depender exclusivamente do painel administrativo ou do terminal.
 
-O projeto continua rodando de forma isolada e simplificada dentro de containers **Docker**.
+O ambiente continua totalmente isolado e configurado via **Docker**.
 
 ---
 
@@ -19,40 +19,24 @@ O projeto continua rodando de forma isolada e simplificada dentro de containers 
 
 ### Página Inicial
 
-![Página Inicial](demo-django/imagens/image1.png)
-
-_Visualização das mensagens e suas respectivas tags._
+![Página Inicial](docs/images/image1.png)
 
 ---
 
-### Gerenciamento de Tags no Admin
+### Formulário de Criação
 
-![Tags no Admin](demo-django/imagens/image3.png)
-
-_Cadastro e manutenção das tags através do Django Admin._
-
----
-
-### Associação de Tags às Mensagens
-
-![Relacionamento N](demo-django/imagens/image2.png)
-
-_Interface com `filter_horizontal` para facilitar a associação entre mensagens e tags._
-
----
-
-_Manipulação dos relacionamentos N:N diretamente pelo ORM._
+![Formulário](docs/images/image2.png)
 
 ---
 
 ## 🧠 O Que Foi Aprendido Nesta Etapa
 
-- **Modelagem Muitos-para-Muitos (N:N):** criação do model `Tag` e sua associação com o model `Mensagem` usando o campo `ManyToManyField`.
-- **Tabelas intermediárias (tabelas de junção):** compreensão de como o Django gerencia automaticamente a tabela pivô (`home_mensagem_tags`) para conectar registros de ambas as tabelas.
-- **Campos específicos (`SlugField`):** utilização de slugs para garantir URLs amigáveis e padronizadas.
-- **Otimização do Django Admin:** uso da propriedade `filter_horizontal` para melhorar a experiência de seleção de múltiplos registros relacionados.
-- **Renderização dinâmica de coleções:** utilização do laço `{% for tag in m.tags.all %}` para exibir as tags associadas a cada mensagem.
-- **Consultas reversas:** acesso às mensagens relacionadas a partir de uma tag utilizando o `related_name`.
+- **Ciclo CRUD e Métodos HTTP:** compreensão prática da diferença entre requisições **GET** (renderização do formulário) e **POST** (envio e processamento dos dados).
+- **Formulários Automatizados (`ModelForm`):** geração e validação de formulários HTML diretamente a partir dos modelos do Django, incluindo personalização através de `widgets`.
+- **Segurança na Web (CSRF):** implementação da tag `{% csrf_token %}` para proteção contra ataques do tipo _Cross-Site Request Forgery_.
+- **Padrão Post/Redirect/Get (PRG):** utilização de `redirect()` após o processamento do formulário para evitar submissões duplicadas.
+- **Processamento Manual de Relacionamentos N:N:** captura de texto livre, separação de tags por vírgulas, uso de `slugify` e reaproveitamento de registros com `get_or_create()`.
+- **Mensagens Temporárias (Flash Messages):** utilização do framework `django.contrib.messages` para exibir feedback ao usuário após operações realizadas.
 
 ---
 
@@ -74,43 +58,30 @@ A aplicação estará disponível em:
 http://localhost:8000
 ```
 
-### 2. Gerar e aplicar as migrações
+### 2. Acessar a aplicação
 
-Com o container em execução, abra um novo terminal e execute:
-
-```bash
-docker compose run --rm web python manage.py makemigrations
-docker compose run --rm web python manage.py migrate
-```
-
-### 3. Gerenciar dados pelo Painel Administrativo
-
-Acesse:
+Abra o navegador e acesse:
 
 ```text
-http://localhost:8000/admin/
+http://localhost:8000
 ```
 
-No painel administrativo será possível:
-
-- Criar novas tags.
-- Editar tags existentes.
-- Associar múltiplas tags a uma mesma mensagem.
-- Visualizar e gerenciar os relacionamentos N:N.
+A partir desta etapa, novas mensagens podem ser criadas diretamente pela interface pública da aplicação.
 
 ---
 
-## 🔄 Entendendo o Relacionamento N:N
+## 🔄 Fluxo de Criação de Mensagens
 
-Neste projeto:
-
-- Uma **Mensagem** pode possuir várias **Tags**.
-- Uma **Tag** pode estar associada a várias **Mensagens**.
-
-O Django cria automaticamente uma tabela intermediária para armazenar essas associações, eliminando a necessidade de gerenciar manualmente as chaves estrangeiras.
+1. O usuário acessa o formulário através de uma requisição **GET**.
+2. O Django renderiza o formulário utilizando um `ModelForm`.
+3. O usuário preenche os campos e envia os dados através de uma requisição **POST**.
+4. O servidor valida as informações recebidas.
+5. As tags são processadas e associadas à mensagem.
+6. Uma mensagem de sucesso é exibida.
+7. O usuário é redirecionado para evitar reenvios acidentais do formulário.
 
 ---
 
 ## 💡 Sobre o Projeto
 
-Este projeto faz parte do meu portfólio de estudos em desenvolvimento backend com Python e Django, com foco em modelagem de banco de dados, ORM, Docker e boas práticas de desenvolvimento web.
+Este projeto faz parte do meu portfólio de estudos em desenvolvimento backend com Python e Django, com foco em desenvolvimento web, modelagem de dados, segurança de aplicações e boas práticas de construção de sistemas.
